@@ -8,13 +8,13 @@ import (
 var DB *gorm.DB
 
 func ConnectDatabase() {
-	dsn := "host=localhost user=willssedgar dbname=mock_trading port=5432 sslmode=disable TimeZone=America/New_York"
+	dsn := "user=postgres.gzzbrleccmtqfymllpln password=vkfaU6wLrKJNa3 host=aws-0-us-east-1.pooler.supabase.com port=5432 dbname=postgres"
 
 	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("Failed to connect to database!")
 	}
-	err = database.AutoMigrate(&User{})
+	err = database.AutoMigrate(&User{}, &Stock{})
 	if err != nil {
 		return
 	}
