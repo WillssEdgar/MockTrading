@@ -30,7 +30,7 @@ interface LineChartProps {
   };
 }
 
-const LineChart: React.FC<LineChartProps> = ({ data }) => {
+const CardChart: React.FC<LineChartProps> = ({ data }) => {
   const chartData: ChartData<'line', number[], string> = {
     labels: data ? data.dates : [],
     datasets: [
@@ -49,14 +49,13 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
     scales: {
       x: {
         title: {
-          display: true,
-          text: 'Date: YYYY-MM-DD',
-          color: 'black',
+          display: false,
         },
         grid: {
           display: false,
         },
         ticks: {
+          display: false,
           color: 'black',
         },
       },
@@ -95,4 +94,4 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
   );
 };
 
-export default LineChart;
+export default CardChart;

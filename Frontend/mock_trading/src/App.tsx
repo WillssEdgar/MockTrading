@@ -9,6 +9,7 @@ import SignUp from './pages/account/SignUp'
 import Dashboard from './pages/dashboard/Dashboard'
 import './index.css'
 import Profile from './pages/profile/Profile'
+import Details from './pages/stocks/details'
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/Contact" element={<Contact />} />
           <Route path="/Dashboard" element={<Dashboard />} />
           <Route path="/Profile" element={<Profile />} />
+          <Route path="/Details" element={<Details />} />
         </Routes>
       </BrowserRouter>
     </>
