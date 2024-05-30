@@ -6,13 +6,9 @@ import (
 	"MockTrading/internal/repository"
 	"MockTrading/internal/services"
 	"MockTrading/internal/utils"
-	"fmt"
-
-	"github.com/gin-gonic/gin"
-
-	"net/http"
-
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func SetupRouter() *gin.Engine {
@@ -42,7 +38,6 @@ func SetupRouter() *gin.Engine {
 		handlers.SignUp(ctx)
 	})
 	r.POST("/signin", func(ctx *gin.Context) {
-		fmt.Println("Hello World", ctx)
 		handlers.SignIn(ctx)
 	})
 
@@ -57,8 +52,12 @@ func SetupRouter() *gin.Engine {
 	stockService := services.NewStockService(models.DB)
 
 	r.POST("/purchase", func(ctx *gin.Context) {
-		fmt.Println("Here in purchase endpoint")
 		stockService.CreateStock(ctx)
+	})
+
+	portfolioService := services.NewPortfolioService(models.DB)
+	r.GET("/portfolio/:email", func(ctx *gin.Context) {
+		portfolioService.GetPortfolioByEmail(ctx)
 	})
 
 	return r

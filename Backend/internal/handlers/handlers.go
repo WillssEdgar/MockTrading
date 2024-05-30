@@ -3,6 +3,7 @@ package handlers
 import (
 	"MockTrading/internal/models"
 	"MockTrading/internal/repository"
+	"MockTrading/internal/services"
 	"fmt"
 	"net/http"
 
@@ -21,13 +22,6 @@ func SignUp(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	userRepo := repository.UserRepository{
-		DB: models.DB, // assuming models.DB is the global DB connection
-	}
-	if err := userRepo.CreateUser(&newUser); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
 
 	user, err := supabaseClient.Auth.SignUp(c, supabase.UserCredentials{
 		Email:    newUser.Email,
@@ -38,6 +32,22 @@ func SignUp(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	userRepo := repository.UserRepository{
+		DB: models.DB, // assuming models.DB is the global DB connection
+	}
+	if err := userRepo.CreateUser(&newUser); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	portfolioService := services.NewPortfolioService(models.DB)
+
+	if err := portfolioService.CreatePortfolio(newUser.Email); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	fmt.Println(user)
 	c.JSON(http.StatusOK, newUser)
 }
