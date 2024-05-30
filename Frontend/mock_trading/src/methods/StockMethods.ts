@@ -1,6 +1,19 @@
 import axios from "axios";
 import { FormEvent } from "react";
 
+export async function fetchPortfolioInfo(
+  email: string,
+  setInfo: (data: any) => void,
+  setInfoError: (message: string) => void
+) {
+  try {
+    const response = await axios.get(`http://localhost:8080/portfolio/${email}`);
+    setInfo(response.data);
+  } catch (error) {
+    setInfoError("Error fetching data");
+  }
+}
+
 export async function fetchCompanyInfo(
   symbol: string,
   setInfo: (data: any) => void,

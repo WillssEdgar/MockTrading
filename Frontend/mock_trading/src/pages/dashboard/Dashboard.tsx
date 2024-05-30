@@ -1,12 +1,10 @@
 
 // Import necessary libraries and components
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import LineChart from '../../components/Charts/LineChart';
-import { fetchCompanyInfo, fetchCompanyInfo1M, fetchCompanyInfoRange, purchaseStock } from '../../methods/StockMethods';
-import Card from '../../components/Cards/Card';
+import { fetchPortfolioInfo } from '../../methods/StockMethods';
 import Carousel from '../../components/Carousel/Carousel';
-import TimeSelector from '../../components/Time/TimeSelector';
 
 interface CompanyInfo {
   message: any;
@@ -33,23 +31,19 @@ const Dashboard = () => {
   const [infoError, setInfoError] = useState<string | null>(null);
   const [data, setData] = useState<FinancialData>({ dates: [], value: [] });
   const [dataError, setDataError] = useState<string | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
-
-
 
   useEffect(() => {
-    console.log("Component loaded and useEffect triggered");
 
-    const fetchCompanyData = async () => {
+    const fetchPortfolioData = async () => {
       try {
-        await fetchCompanyInfo('AAPL', setInfo, setInfoError);
+        await fetchPortfolioInfo(email, setInfo, setInfoError);
       } catch (error) {
         setInfoError('Error fetching company info');
       }
     };
 
     if (email) {
-      fetchCompanyData();
+      fetchPortfolioData();
     }
   }, [email]);
 
@@ -73,42 +67,7 @@ const Dashboard = () => {
     }
   }, [info]);
 
-  const fetchChartData = async (range: string) => {
-    try {
 
-      await fetchCompanyInfoRange('AAPL', range, setInfo, setInfoError);
-      if (info) {
-        const chartData = info.message[0];
-        console.log("chartData", chartData);
-
-        const timestamps = chartData.timestamp;
-        console.log("TimeStamps: ", timestamps);
-
-        const values = chartData.indicators.quote[0].close;
-        console.log("Values: ", values);
-
-        const formattedDates = timestamps.map((timestamp: number) =>
-          new Date(timestamp * 1000).toLocaleDateString()
-        );
-
-        setData({ dates: formattedDates, value: values });
-        console.log("Data in fetchCompanyData: ", data);
-      }
-
-    } catch (error) {
-      setDataError('Error fetching chart data');
-    }
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedRange = event.target.value;
-    fetchChartData(selectedRange);
-  };
-
-  const handleTimeSelect = (option: string) => {
-    setSelectedTime(option);
-    fetchChartData(option);
-  };
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center">
@@ -120,9 +79,7 @@ const Dashboard = () => {
             <LineChart data={data} />
           </div>
         </div>
-        <div className='text-start'>
-          <TimeSelector onSelect={handleTimeSelect} />
-        </div>
+
       </div>
       <div>
         <Carousel stockNames={defaultStockNames} email={email} />
