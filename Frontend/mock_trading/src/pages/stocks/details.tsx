@@ -1,7 +1,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { fetchCompanyInfo, fetchCompanyInfoRange } from "../../methods/StockMethods";
+import { fetchCompanyInfo, fetchCompanyInfoRange, purchaseStock } from "../../methods/StockMethods";
 import LineChart from "../../components/Charts/LineChart";
 import TimeSelector from "../../components/Time/TimeSelector";
 interface CompanyInfo {
@@ -102,10 +102,16 @@ function Details() {
   const handlePurchase = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
-    const purchaseAmount = form.elements.namedItem("amountOfShare");
+    const purchaseAmountElement = form.elements.namedItem("amountOfShare") as HTMLInputElement;
+    const purchaseAmount = parseInt(purchaseAmountElement.value, 10);
+    if (info) {
 
-    // const response = purchaseStock()
 
+      if (!isNaN(purchaseAmount)) {
+        const response = await purchaseStock(symbol, info.message[0].meta.regularMarketPrice, purchaseAmount);
+        console.log(response);
+      }
+    }
   }
   return (
     <div>

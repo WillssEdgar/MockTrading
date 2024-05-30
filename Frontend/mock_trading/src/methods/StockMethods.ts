@@ -56,8 +56,9 @@ interface Stock {
 
 export async function purchaseStock(
   symbol: string,
-  price: number,
 
+  price: number,
+  amount: number,
 ) {
   const currentDate = new Date();
 
@@ -68,13 +69,17 @@ export async function purchaseStock(
 
   // Combine them into the desired format
   const formattedDate = month + day + year;
-
+  console.log("Date", formattedDate);
+  console.log("Price", price);
+  console.log("amount", amount);
   try {
     const response = await axios.post<Stock>("http://localhost:8080/purchase",
       {
-        symbol,
-        formattedDate,
-        price
+        "Symbol": symbol,
+        "PurchaseDate": formattedDate,
+        "PurchasePrice": price,
+        "AmountOfShares": amount,
+
       }
     )
 
