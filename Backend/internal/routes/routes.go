@@ -6,9 +6,11 @@ import (
 	"MockTrading/internal/repository"
 	"MockTrading/internal/services"
 	"MockTrading/internal/utils"
+	"fmt"
+	"net/http"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func SetupRouter() *gin.Engine {
@@ -55,10 +57,22 @@ func SetupRouter() *gin.Engine {
 		stockService.CreateStock(ctx)
 	})
 
+	transactionService := services.NewTransactionService(models.DB)
+	r.POST("/addTransaction", func(ctx *gin.Context) {
+		transactionService.CreateTransaction(ctx)
+	})
+
 	portfolioService := services.NewPortfolioService(models.DB)
-	r.GET("/portfolio/:email", func(ctx *gin.Context) {
+	r.GET("/portfolio/:UserEmail", func(ctx *gin.Context) {
 		portfolioService.GetPortfolioByEmail(ctx)
 	})
 
+	r.GET("/getBalance/:UserEmail", func(ctx *gin.Context) {
+		portfolioService.GetPortfolioBalanceByEmail(ctx)
+	})
+	r.POST("/updateBalance", func(ctx *gin.Context) {
+		fmt.Println("Made it")
+		portfolioService.UpdateBalance(ctx)
+	})
 	return r
 }

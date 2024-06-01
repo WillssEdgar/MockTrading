@@ -25,9 +25,10 @@ func NewPortfolioService(db *gorm.DB) *PortfolioService {
 
 func (s *PortfolioService) CreatePortfolio(userEmail string) error {
 	newPortfolio := models.Portfolio{
-		Balance:   1000000, // Default balance
-		UserEmail: userEmail,
-		Stocks:    []models.Stock{},
+		Balance:      1000000, // Default balance
+		UserEmail:    userEmail,
+		Stocks:       []models.Stock{},
+		Transactions: []models.Transaction{},
 	}
 
 	if err := s.PortfolioRepo.CreatePortfolio(&newPortfolio); err != nil {
@@ -40,7 +41,7 @@ func (s *PortfolioService) CreatePortfolio(userEmail string) error {
 }
 
 func (s *PortfolioService) GetPortfolioByEmail(c *gin.Context) {
-	email := c.Param("email")
+	email := c.Param("UserEmail")
 
 	if s.PortfolioRepo == nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Portfolio Repo is not initialized"})
@@ -63,4 +64,48 @@ func (s *PortfolioService) GetPortfolioByEmail(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, user)
+}
+
+func (s *PortfolioService) UpdateBalance(c *gin.Context) {
+
+	var updateBalance models.BalanceDto
+
+	if err := c.ShouldBindJSON(&updateBalance); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	portfolio, err := s.PortfolioRepo.UpdateBalance(updateBalance)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, portfolio)
+}
+
+func (s *PortfolioService) GetPortfolioBalanceByEmail(c *gin.Context) {
+	email := c.Param("UserEmail")
+
+	if s.PortfolioRepo == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Portfolio Repo is not initialized"})
+		return
+	}
+
+	if email == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Email is required"})
+		return
+	}
+
+	// portfolioRepo := repository.PortfolioRepository{
+	// 	DB: models.DB, // assuming models.DB is the global DB connection
+	// }
+
+	balance, err := s.PortfolioRepo.GetBalanceByEmail(email)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, balance)
 }

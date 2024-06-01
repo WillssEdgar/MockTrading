@@ -8,6 +8,7 @@ export async function fetchPortfolioInfo(
 ) {
   try {
     const response = await axios.get(`http://localhost:8080/portfolio/${email}`);
+    console.log("Fetch Portfolio Info ", response.data)
     setInfo(response.data);
   } catch (error) {
     setInfoError("Error fetching data");
@@ -65,11 +66,56 @@ interface Stock {
   symbol: string;
   purchaseDate: string;
   purchasePrice: number;
+  amountOfShares: number;
+  portfolioID: number;
+
 }
+
+export async function getPortfolio(
+  email: string
+) {
+  try {
+    const response = await axios.get(`http://localhost:8080/portfolio/${email}`);
+    console.log("Response", response)
+    return response.data;
+  } catch (error) {
+    console.error("error fetching portfolio", error);
+  }
+}
+
+interface UpdateBalance {
+  email: string;
+  balance: number;
+}
+
+export async function updateBalance(
+  email: string,
+  balance: number
+) {
+  try {
+    const response = await axios.post<UpdateBalance>(`http://localhost:8080/updateBalance`,
+      {
+        "Email": email,
+        "Balance": balance
+      });
+    console.log("Response", response)
+    return response.data;
+  } catch (error) {
+    console.error("error fetching portfolio", error);
+  }
+}
+
+interface Transaction {
+  TransactionDate: string;
+  TransactionType: string;
+  NewBalance: number;
+  PortfolioID: number;
+}
+
 
 export async function purchaseStock(
   symbol: string,
-
+  email: string,
   price: number,
   amount: number,
 ) {
@@ -85,18 +131,40 @@ export async function purchaseStock(
   console.log("Date", formattedDate);
   console.log("Price", price);
   console.log("amount", amount);
+
+
+
   try {
-    const response = await axios.post<Stock>("http://localhost:8080/purchase",
+    const portfolio = await getPortfolio(email);
+    if (!portfolio || !portfolio.ID) {
+      throw new Error("Portfolio not found or invalid ID");
+    }
+    const balance = portfolio.Balance;
+    const amountSpent = amount * price;
+    const newBalance = amountSpent + balance;
+    const response = await axios.post<Transaction>("http://localhost:8080/purchase",
       {
         "Symbol": symbol,
         "PurchaseDate": formattedDate,
         "PurchasePrice": price,
         "AmountOfShares": amount,
+        "PortfolioID": portfolio.ID
 
       }
     )
+    const transactionResponse = await axios.post<Stock>("http://localhost:8080/addTransaction",
+      {
+        "TransactionDate": formattedDate,
+        "TransactionType": "BOUGHT",
+        "NewBalance": newBalance,
+        "PortfolioID": portfolio.ID
 
-    console.log(response)
+      }
+    )
+    updateBalance(email, newBalance);
+
+    console.log("Stock Response", response.data)
+    console.log("Transaction Response", transactionResponse.data)
 
   } catch (error) {
     console.error("Failed to Complete Purchase")

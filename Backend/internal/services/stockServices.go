@@ -3,7 +3,7 @@ package services
 import (
 	"MockTrading/internal/models"
 	"MockTrading/internal/repository"
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -29,12 +29,15 @@ func (s *StockService) CreateStock(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	fmt.Println("New Stock: ", newStock)
 
 	if err := s.StockRepo.CreateStock(&newStock); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create stock: " + err.Error()})
 		return
 
+	}
+	repo := &repository.PortfolioRepository{DB: models.DB}
+	if err := repo.AddStockToPortfolio(newStock); err != nil {
+		log.Fatalf("failed to add transaction: %v", err)
 	}
 
 	c.JSON(http.StatusCreated, newStock)

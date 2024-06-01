@@ -47,25 +47,25 @@ const Dashboard = () => {
     }
   }, [email]);
 
-  useEffect(() => {
-    if (info) {
-      const chartData = info.message[0];
-      console.log("chartData", chartData);
-
-      const timestamps = chartData.timestamp;
-      console.log("TimeStamps: ", timestamps);
-
-      const values = chartData.indicators.quote[0].close;
-      console.log("Values: ", values);
-
-      const formattedDates = timestamps.map((timestamp: number) =>
-        new Date(timestamp * 1000).toLocaleDateString()
-      );
-
-      setData({ dates: formattedDates, value: values });
-      console.log("Data in fetchCompanyData: ", data);
-    }
-  }, [info]);
+  // useEffect(() => {
+  //   if (info) {
+  //     const chartData = info.message[0];
+  //     console.log("chartData", chartData);
+  //
+  //     const timestamps = chartData.timestamp;
+  //     console.log("TimeStamps: ", timestamps);
+  //
+  //     const values = chartData.indicators.quote[0].close;
+  //     console.log("Values: ", values);
+  //
+  //     const formattedDates = timestamps.map((timestamp: number) =>
+  //       new Date(timestamp * 1000).toLocaleDateString()
+  //     );
+  //
+  //     setData({ dates: formattedDates, value: values });
+  //     console.log("Data in fetchCompanyData: ", data);
+  //   }
+  // }, [info]);
 
 
 
@@ -73,11 +73,11 @@ const Dashboard = () => {
     <div className="min-h-screen flex flex-col justify-center items-center">
       <div className="container mx-auto bg-slate-200 p-4 rounded-lg shadow-lg">
         <div className="w-full flex flex-col justify-center items-center">
-          <h1 className='text-3xl'>Line Chart Example</h1>
-          {dataError && <p>Error: {dataError}</p>}
-          <div className="chart-container" style={{ width: '80%', height: '60%' }}>
-            <LineChart data={data} />
-          </div>
+          {/* <h1 className='text-3xl'>Line Chart Example</h1> */}
+          {/* {dataError && <p>Error: {dataError}</p>} */}
+          {/* <div className="chart-container" style={{ width: '80%', height: '60%' }}> */}
+          {/*   <LineChart data={data} /> */}
+          {/* </div> */}
         </div>
 
       </div>

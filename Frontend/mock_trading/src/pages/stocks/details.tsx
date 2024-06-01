@@ -31,7 +31,7 @@ function Details() {
 
     const fetchCompanyData = async () => {
       try {
-        await fetchCompanyInfo('AAPL', setInfo, setInfoError);
+        await fetchCompanyInfo(symbol, setInfo, setInfoError);
       } catch (error) {
         setInfoError('Error fetching company info');
       }
@@ -108,7 +108,7 @@ function Details() {
 
 
       if (!isNaN(purchaseAmount)) {
-        const response = await purchaseStock(symbol, info.message[0].meta.regularMarketPrice, purchaseAmount);
+        const response = await purchaseStock(symbol, email, info.message[0].meta.regularMarketPrice, purchaseAmount);
         console.log(response);
       }
     }
