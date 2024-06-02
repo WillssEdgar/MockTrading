@@ -57,8 +57,21 @@ function Nav() {
           {!email ? (
             <>
               {/* Sign-in and Sign-up links */}
-              <a className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold rounded-xl transition duration-200" href="/SignIn">Sign In</a>
-              <a className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" href="/SignUp">Sign Up</a>
+              <button className="bg-gray-50  font-bold rounded-xl shadow-md text-sm text-gray-900 px-6 py-2 mx-2
+                transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-gray-100
+                duration-300 "
+                onClick={() => { navigate("/SignIn") }}
+              >
+                Sign In
+              </button>
+
+              <button className="bg-blue-600 font-bold rounded-xl shadow-md text-sm text-white px-6 py-2
+                transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500
+                duration-300 "
+                onClick={() => { navigate("/SignUp") }}
+              >
+                Sign Up
+              </button>
             </>
           ) : (
             <>
