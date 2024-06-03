@@ -1,32 +1,48 @@
+import { useNavigate } from "react-router-dom"
+import bgImage from "../../assets/Untitled design.png";
 
 
 function Home() {
-
+  const navigate = useNavigate();
 
 
 
 
   return (
     <>
-      <div className="container flex flex-col items-center justify-center min-h-screen  py-10">
-        <div className=" w-full max-w-6xl  mb-20">
+      <div className="container flex flex-col items-center mt-14 min-h-screen py-10"
+        style={{ backgroundImage: `url(${bgImage})` }}
+      >
+        <div className=" w-full max-w-6xl  mb-96">
           <h1 className="text-3xl font-bold text-start text-black mb-1">Welcome to
             <span className="text-blue-600"> StockSim</span></h1>
-          {/* <p className="text-lg text-gray-700 mb-6 font-semibold"> */}
-          {/*   Welcome to StockSim, your ultimate platform to master the art of trading without any financial risk. */}
-          {/*   Dive into the world of stock markets with real-time data, comprehensive educational resources, and a */}
-          {/*   seamless, intuitive interface designed for both beginners and experienced traders. With StockSim, you */}
-          {/*   can practice trading, build your virtual portfolio, and track your performance with advanced analytics. */}
-          {/*   Whether you aim to sharpen your trading skills or understand market dynamics, our app offers a safe and */}
-          {/*   engaging environment to achieve your goals. Sign up today and start your journey towards becoming a confident */}
-          {/*   and informed trader. */}
-          {/* </p> */}
           <p className="text-lg text-gray-700 mb-6 font-semibold">
             Master the art of trading with real-time data and risk-free simulations
           </p>
 
         </div>
-      </div>
+
+        <div className="w-full max-w-6xl  mb-5 " >
+          <button className="bg-gray-50  font-bold rounded-xl shadow-md w-64 text-sm text-gray-900 px-6 py-2 
+                transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-gray-100
+                duration-300 "
+            onClick={() => { navigate("/SignIn") }}
+          >
+            Sign In
+          </button>
+
+        </div>
+        <div className="w-full max-w-6xl" >
+          <button className="bg-blue-600 font-bold rounded-xl shadow-md w-64 text-sm text-white px-6 py-2
+                transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500
+                duration-300 "
+            onClick={() => { navigate("/SignUp") }}
+          >
+            Sign Up
+          </button>
+        </div>
+
+      </div >
       <div className="container flex flex-col items-center justify-center min-h-screen  py-10">
         <div>
           <p className="text-lg text-gray-700 mb-6 font-semibold">
