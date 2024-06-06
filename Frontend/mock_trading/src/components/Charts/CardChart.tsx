@@ -37,10 +37,11 @@ const CardChart: React.FC<LineChartProps> = ({ data }) => {
       {
         label: 'Data',
         data: data ? data.value : [],
-        pointRadius: .5,
+        pointRadius: .09,
         pointHoverRadius: 7,
         fill: false,
         borderColor: '#007FFF',
+        borderWidth: 1,
         tension: 0.1,
       },
     ],
@@ -61,20 +62,24 @@ const CardChart: React.FC<LineChartProps> = ({ data }) => {
       },
       y: {
         title: {
-          display: true,
+          display: false,
           text: '$ US Dollars',
           color: 'black',
         },
         grid: {
+          display: false,
           color: 'black',
         },
         ticks: {
+          display: false,
           color: 'black',
         },
       },
     },
     plugins: {
       legend: {
+
+        display: false,
         labels: {
           color: 'black',
         },
@@ -89,7 +94,7 @@ const CardChart: React.FC<LineChartProps> = ({ data }) => {
 
   return (
     <div>
-      <Line data={chartData} options={options} />
+      <Line data={chartData} options={options} className='w-16 h-16' />
     </div>
   );
 };

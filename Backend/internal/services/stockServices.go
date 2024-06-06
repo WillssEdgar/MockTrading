@@ -3,8 +3,10 @@ package services
 import (
 	"MockTrading/internal/models"
 	"MockTrading/internal/repository"
+	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -41,4 +43,30 @@ func (s *StockService) CreateStock(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, newStock)
+}
+
+func (s *StockService) GetStocks(c *gin.Context) {
+	// Create a placeholder for the request body, if needed
+	portfolioIdStr := c.Param("PortfolioID")
+	portfolioId, err := strconv.ParseInt(portfolioIdStr, 10, 64)
+	if err != nil || portfolioId <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid PortfolioID"})
+		return
+	}
+	fmt.Println("PortfolioID", portfolioId)
+
+	// Check if the repository is initialized
+	if s.StockRepo == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "StockList Repo is not initialized"})
+		return
+	}
+	// Pass the stock object to the GetStockList method
+	stock, err := s.StockRepo.GetStock(portfolioId)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, stock)
+
 }

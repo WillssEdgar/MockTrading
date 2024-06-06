@@ -57,6 +57,12 @@ func SetupRouter() *gin.Engine {
 		stockService.CreateStock(ctx)
 	})
 
+	r.GET("/getStocks/:PortfolioID", func(ctx *gin.Context) {
+		portfolioIdStr := ctx.Param("PortfolioID")
+		fmt.Println("portfolioIdStr", portfolioIdStr)
+		stockService.GetStocks(ctx)
+	})
+
 	transactionService := services.NewTransactionService(models.DB)
 	r.POST("/addTransaction", func(ctx *gin.Context) {
 		transactionService.CreateTransaction(ctx)
@@ -74,5 +80,12 @@ func SetupRouter() *gin.Engine {
 		fmt.Println("Made it")
 		portfolioService.UpdateBalance(ctx)
 	})
+
+	stockListService := services.NewStockListService(models.DB)
+
+	r.GET("/getStockList", func(ctx *gin.Context) {
+		stockListService.GetStockList(ctx)
+	})
+
 	return r
 }

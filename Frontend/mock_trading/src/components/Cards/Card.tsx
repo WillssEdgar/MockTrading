@@ -15,18 +15,17 @@ interface FinancialData {
 interface CardProps {
   stockdata: {
     stocksymbol: string;
+    stockName: string;
 
   };
   onClick?: () => void;
 }
 
 const Card: React.FC<CardProps> = ({ stockdata, onClick }) => {
-  const navigate = useNavigate();
   const [info, setInfo] = useState<CompanyInfo | null>(null);
   const [infoError, setInfoError] = useState<string | null>(null);
   const [data, setData] = useState<FinancialData>({ dates: [], value: [] });
   const [dataError, setDataError] = useState<string | null>(null);
-  const [symbol, setSymbol] = useState<string | null>("AAPL");
 
 
   useEffect(() => {
@@ -54,11 +53,18 @@ const Card: React.FC<CardProps> = ({ stockdata, onClick }) => {
   }, [info]);
 
   return (
-    <div className=" cursor-pointer container bg-blue-100 hover:bg-blue-200 rounded-lg p-4 mb-4 shadow-lg items-center"
+    <div className="grid grid-rows-1 grid-cols-2 border border-black cursor-pointer   
+      hover:bg-slate-200 rounded-lg px-0.5 shadow-lg items-center w-full"
       onClick={onClick}>
-      <h1 className="title">{stockdata.stocksymbol}</h1>
+      <div className="text-lg text-start font-bold">
+        {stockdata.stocksymbol}<br />
+        <span className='text-sm font-normal'>
+          ({stockdata.stockName})
+        </span>
+
+      </div>
       {dataError && <p className="error">Error: {dataError}</p>}
-      <div className="chart-container">
+      <div >
         {data ? (
           <CardChart data={data} />
         ) : (

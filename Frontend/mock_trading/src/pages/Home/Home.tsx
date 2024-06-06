@@ -11,7 +11,12 @@ function Home() {
   return (
     <>
       <div className="container flex flex-col items-center mt-14 min-h-screen py-10"
-        style={{ backgroundImage: `url(${bgImage})` }}
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: 'cover', // Ensures the image covers the whole container
+          backgroundPosition: 'center', // Centers the image
+          backgroundRepeat: 'no-repeat' // Prevents the image from repeating}}
+        }}
       >
         <div className=" w-full max-w-6xl  mb-96">
           <h1 className="text-3xl font-bold text-start text-black mb-1">Welcome to

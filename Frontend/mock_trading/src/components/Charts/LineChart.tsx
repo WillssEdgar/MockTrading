@@ -9,7 +9,8 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler,
 } from 'chart.js';
 import { ChartData } from 'chart.js/auto';
 
@@ -20,7 +21,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler,
 );
 
 interface LineChartProps {
@@ -36,12 +38,13 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
     datasets: [
       {
         label: 'Data',
+        fill: true,
         data: data ? data.value : [],
-        pointRadius: .5,
+        pointRadius: 0.5,
         pointHoverRadius: 7,
-        fill: false,
         borderColor: '#007FFF',
-        tension: 0.1,
+        borderWidth: 1,
+        backgroundColor: 'rgba(0, 127, 255, 0.2)', // Add this line for the fill color
       },
     ],
   };
@@ -54,7 +57,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
           color: 'black',
         },
         grid: {
-          display: false,
+          color: 'lightGrey'
         },
         ticks: {
           color: 'black',
@@ -67,7 +70,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
           color: 'black',
         },
         grid: {
-          color: 'black',
+          color: 'lightGrey',
         },
         ticks: {
           color: 'black',

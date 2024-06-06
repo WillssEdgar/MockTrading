@@ -18,3 +18,14 @@ func (r *StockRepository) CreateStock(stock *models.Stock) error {
 	}
 	return r.DB.Create(stock).Error
 }
+
+func (r *StockRepository) GetStock(portfolioId int64) ([]models.Stock, error) {
+	var stocks []models.Stock
+
+	if err := r.DB.Where("portfolio_id", portfolioId).Find(&stocks).Error; err != nil {
+		return nil, err
+	}
+
+	return stocks, nil
+
+}
